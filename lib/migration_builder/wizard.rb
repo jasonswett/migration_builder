@@ -15,12 +15,19 @@ module MigrationBuilder
       options = {
         'Add column to existing table' => {
           callback: -> {
+            lines = []
+            @table_name = prompt_for_table_name
+            lines << "change_table :#{@table_name} do |t|"
+
             prompt = Prompts::AddColumn.new(@prompt)
             prompt.run
 
-            @table_name = prompt.table_name
-            @filename = prompt.filename
-            @content = prompt.content
+            @filename = "add_#{prompt.column_name}_to_#{@table_name}"
+
+            lines += prompt.lines
+            lines << 'end'
+
+            @content = lines.join("\n")
           }
         },
         'Rename existing table' => {
@@ -34,7 +41,19 @@ module MigrationBuilder
         },
         'Create new table' => {
           callback: -> {
-            raise 'Not implemented'
+            lines = []
+            @table_name = @prompt.ask('Table name:')
+            lines << "create_table :#{@table_name} do |t|"
+
+            prompt = Prompts::AddColumn.new(@prompt)
+            prompt.run
+
+            @filename = "create_#{@table_name}"
+
+            lines += prompt.lines
+            lines << 'end'
+
+            @content = lines.join("\n")
           }
         },
         'Drop existing table' => {
@@ -60,15 +79,15 @@ module MigrationBuilder
 
     def start
       collect_input
+      raise 'Missing table name' unless @table_name
 
-      Rails::Generators.invoke(
-        :smart_migration,
-        [
-          @table_name,
-          '--filename', @filename,
-          '--content', @content
-        ],
-      )
+      args = [
+        @table_name,
+        '--filename', @filename,
+        '--content', @content
+      ]
+
+      Rails::Generators.invoke(:smart_migration, args)
     end
   end
 end

@@ -2,15 +2,15 @@ module MigrationBuilder
   module Prompts
     class AddColumn
       TABLES_TO_EXCLUDE = %w(ar_internal_metadata schema_migrations)
-      attr_reader :filename, :content, :table_name
+      attr_reader :column_name, :lines, :table_name
 
       def initialize(prompt)
         @prompt = prompt
+        @lines = []
       end
 
       def run
-        @table_name = prompt_for_table_name
-        column_name = @prompt.ask('New column name:')
+        @column_name = @prompt.ask('Column name:')
 
         types = %w(
               string
@@ -28,18 +28,8 @@ module MigrationBuilder
               primary_key
         )
 
-        column_type = @prompt.enum_select('Type:', types)
-
-        @filename = "add_#{column_name}_to_#{@table_name}"
-        @content = "add_column :#{@table_name}, :#{column_name}, :#{column_type}"
-      end
-
-      def prompt_for_table_name
-        @prompt.enum_select('Which table?', table_names)
-      end
-
-      def table_names
-        ::ActiveRecord::Base.connection.tables - TABLES_TO_EXCLUDE
+        @column_type = @prompt.enum_select("Column type for #{column_name}:", types)
+        @lines << "t.#{@column_type} :#{@column_name}"
       end
     end
   end

@@ -4,7 +4,40 @@ require 'stringio'
 RSpec.describe MigrationBuilder::Wizard do
   before { @output = StringIO.new }
 
-  context 'drop table' do
+  describe 'create table' do
+    it 'generates create_table code' do
+      prompt = FakePrompt.new([
+        {
+          expected_question: 'What would you like to do?',
+          assert_options: -> options do
+            expect(options).to include('Create new table')
+          end,
+          response: 'Create new table'
+        },
+        {
+          expected_question: 'Table name:',
+          response: 'menu_items'
+        },
+        {
+          expected_question: 'Column name:',
+          response: 'name'
+        },
+        {
+          expected_question: 'Column type for name:',
+          assert_options: -> options { expect(options).to include('string') },
+          response: 'string'
+        }
+      ])
+
+      migration_builder = MigrationBuilder::Wizard.new(prompt: prompt, output: @output)
+      migration_builder.collect_input
+
+      expect(migration_builder.filename).to eq('create_menu_items')
+      expect(migration_builder.content).to eq(%(create_table :menu_items do |t|\nt.string :name\nend))
+    end
+  end
+
+  describe 'drop table' do
     it 'generates drop_table code' do
       prompt = FakePrompt.new([
         {
@@ -28,7 +61,7 @@ RSpec.describe MigrationBuilder::Wizard do
     end
   end
 
-  context 'rename table' do
+  describe 'rename table' do
     it 'generates rename_table code' do
       prompt = FakePrompt.new([
         {
@@ -56,7 +89,7 @@ RSpec.describe MigrationBuilder::Wizard do
     end
   end
 
-  context 'add column' do
+  describe 'add column' do
     it 'generates add_column code' do
       prompt = FakePrompt.new([
         {
@@ -71,11 +104,11 @@ RSpec.describe MigrationBuilder::Wizard do
           response: 'menu_items'
         },
         {
-          expected_question: 'New column name:',
+          expected_question: 'Column name:',
           response: 'price_cents'
         },
         {
-          expected_question: 'Type:',
+          expected_question: 'Column type for price_cents:',
           assert_options: -> options do
             expect(options).to eq(%w(
               string
@@ -101,7 +134,7 @@ RSpec.describe MigrationBuilder::Wizard do
       migration_builder.collect_input
 
       expect(migration_builder.filename).to eq('add_price_cents_to_menu_items')
-      expect(migration_builder.content).to eq("add_column :menu_items, :price_cents, :integer")
+      expect(migration_builder.content).to eq("change_table :menu_items do |t|\nt.integer :price_cents\nend")
     end
   end
 end
