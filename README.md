@@ -1,14 +1,20 @@
-# MigrationBuilder
-Short description and motivation.
+# Migration Builder
+Migration Builder is an interactive command-line tool that builds Rails migrations. The goal is for Migration Builder to be able to generate 95% of the migration types I want without me having to google the Rails migration syntax.
 
 ## Usage
-How to use my plugin.
+To start the Migration Builder prompt, run:
+
+```
+$ rails db:start
+```
 
 ## Installation
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'migration_builder'
+group :development do
+  gem 'migration_builder', git: 'https://github.com/jasonswett/migration_builder'
+end
 ```
 
 And then execute:
