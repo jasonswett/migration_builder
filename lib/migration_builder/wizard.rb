@@ -70,7 +70,7 @@ module MigrationBuilder
     end
 
     def prompt_for_table_name
-      @table_name = @prompt.enum_select('Which table?', table_names)
+      @table_name = @prompt.enum_select('Which table?', table_names, per_page: 50)
     end
 
     def table_names
