@@ -5,7 +5,7 @@ Migration Builder is an interactive command-line tool that builds Rails migratio
 To start the Migration Builder prompt, run:
 
 ```
-$ rails db:start
+$ rails mb:start
 ```
 
 ## Installation
