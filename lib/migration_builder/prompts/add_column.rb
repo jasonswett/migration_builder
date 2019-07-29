@@ -1,7 +1,6 @@
 module MigrationBuilder
   module Prompts
     class AddColumn
-      TABLES_TO_EXCLUDE = %w(ar_internal_metadata schema_migrations)
       attr_reader :column_name, :lines, :table_name
 
       def initialize(prompt)

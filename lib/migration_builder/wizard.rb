@@ -1,18 +1,18 @@
 require 'tty-prompt'
 require_relative 'prompts/add_column'
+require_relative 'utilities'
 
 module MigrationBuilder
   class Wizard
-    TABLES_TO_EXCLUDE = %w(ar_internal_metadata schema_migrations)
     attr_reader :content, :filename
 
-    def initialize(prompt: TTY::Prompt.new, output: $stdout)
+    def initialize(prompt: TTY::Prompt.new, utility_class: Utilities)
       @prompt = prompt
-      @output = output
+      @utility_class = utility_class
     end
 
     def collect_input
-      options = {
+      commands = {
         'Add column to existing table' => {
           callback: -> {
             lines = []
@@ -65,8 +65,14 @@ module MigrationBuilder
         }
       }
 
-      action = @prompt.enum_select('What would you like to do?', options.keys)
-      options[action][:callback].call
+      if table_names.any?
+        options = commands.keys
+      else
+        options = ['Create new table']
+      end
+
+      action = @prompt.enum_select('What would you like to do?', options)
+      commands[action][:callback].call if action
     end
 
     def prompt_for_table_name
@@ -74,7 +80,7 @@ module MigrationBuilder
     end
 
     def table_names
-      ::ActiveRecord::Base.connection.tables - TABLES_TO_EXCLUDE
+      @utility_class.table_names
     end
 
     def start

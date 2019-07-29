@@ -1,8 +1,35 @@
 require 'rails_helper'
 require 'stringio'
 
+class FakeUtilities
+  def self.table_names
+    ['foo', 'bar']
+  end
+end
+
+class FakeUtilitiesEmpty
+  def self.table_names
+    []
+  end
+end
+
 RSpec.describe MigrationBuilder::Wizard do
   before { @output = StringIO.new }
+
+  context 'no existing tables' do
+    it 'does not offer any altering options' do
+      prompt = FakePrompt.new([
+        {
+          expected_question: 'What would you like to do?',
+          assert_options: -> options do
+            expect(options).to eq(['Create new table'])
+          end
+        }
+      ])
+
+      MigrationBuilder::Wizard.new(prompt: prompt, utility_class: FakeUtilitiesEmpty).collect_input
+    end
+  end
 
   describe 'create table' do
     it 'generates create_table code' do
@@ -29,7 +56,7 @@ RSpec.describe MigrationBuilder::Wizard do
         }
       ])
 
-      migration_builder = MigrationBuilder::Wizard.new(prompt: prompt, output: @output)
+      migration_builder = MigrationBuilder::Wizard.new(prompt: prompt, utility_class: FakeUtilities)
       migration_builder.collect_input
 
       expect(migration_builder.filename).to eq('create_menu_items')
@@ -53,7 +80,7 @@ RSpec.describe MigrationBuilder::Wizard do
         },
       ])
 
-      migration_builder = MigrationBuilder::Wizard.new(prompt: prompt, output: @output)
+      migration_builder = MigrationBuilder::Wizard.new(prompt: prompt, utility_class: FakeUtilities)
       migration_builder.collect_input
 
       expect(migration_builder.filename).to eq('drop_menu_items')
@@ -81,7 +108,7 @@ RSpec.describe MigrationBuilder::Wizard do
         }
       ])
 
-      migration_builder = MigrationBuilder::Wizard.new(prompt: prompt, output: @output)
+      migration_builder = MigrationBuilder::Wizard.new(prompt: prompt, utility_class: FakeUtilities)
       migration_builder.collect_input
 
       expect(migration_builder.filename).to eq('rename_menu_items_to_tasty_menu_items')
@@ -130,7 +157,7 @@ RSpec.describe MigrationBuilder::Wizard do
         },
       ])
 
-      migration_builder = MigrationBuilder::Wizard.new(prompt: prompt, output: @output)
+      migration_builder = MigrationBuilder::Wizard.new(prompt: prompt, utility_class: FakeUtilities)
       migration_builder.collect_input
 
       expect(migration_builder.filename).to eq('add_price_cents_to_menu_items')
