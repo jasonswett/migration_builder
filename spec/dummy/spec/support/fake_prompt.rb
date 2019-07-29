@@ -4,8 +4,8 @@ class FakePrompt
     @index = 0
   end
 
-  def enum_select(question, options)
-    accept_input(question, options)
+  def enum_select(question, *args)
+    accept_input(question, args[0])
   end
 
   def ask(question)
@@ -14,7 +14,7 @@ class FakePrompt
 
   private
 
-  def accept_input(question, options = nil)
+  def accept_input(question, *args)
     command = @commands[@index]
 
     if command[:expected_question] != question
@@ -22,7 +22,7 @@ class FakePrompt
     end
 
     if command[:assert_options]
-      command[:assert_options].call(options)
+      command[:assert_options].call(args[0])
     end
 
     @commands[@index][:response].tap do |value|
