@@ -16,19 +16,17 @@ module MigrationBuilder
       commands = {
         'Add column to existing table' => {
           callback: -> {
-            lines = []
             @table_name = prompt_for_table_name
-            lines << "    change_table :#{@table_name} do |t|"
-
             subprompt = Subprompts::AddColumn.new(@prompt)
             subprompt.run
 
-            @filename = "add_#{subprompt.column_name}_to_#{@table_name}"
-
+            lines = []
+            lines << "    change_table :#{@table_name} do |t|"
             lines += subprompt.lines.map { |l| "      #{l}" }
             lines << '    end'
 
             @content = lines.join("\n")
+            @filename = "add_#{subprompt.column_name}_to_#{@table_name}"
           }
         },
         'Rename existing table' => {
@@ -42,19 +40,17 @@ module MigrationBuilder
         },
         'Create new table' => {
           callback: -> {
-            lines = []
             @table_name = @prompt.ask('Table name:')
-            lines << "    create_table :#{@table_name} do |t|"
-
             subprompt = Subprompts::AddColumn.new(@prompt)
             subprompt.run
 
-            @filename = "create_#{@table_name}"
-
+            lines = []
+            lines << "    create_table :#{@table_name} do |t|"
             lines += subprompt.lines.map { |l| "      #{l}" }
             lines << '    end'
 
             @content = lines.join("\n")
+            @filename = "create_#{@table_name}"
           }
         },
         'Drop existing table' => {
