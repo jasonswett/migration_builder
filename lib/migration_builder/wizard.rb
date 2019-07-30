@@ -18,15 +18,15 @@ module MigrationBuilder
           callback: -> {
             lines = []
             @table_name = prompt_for_table_name
-            lines << "change_table :#{@table_name} do |t|"
+            lines << "    change_table :#{@table_name} do |t|"
 
             subprompt = Subprompts::AddColumn.new(@prompt)
             subprompt.run
 
             @filename = "add_#{subprompt.column_name}_to_#{@table_name}"
 
-            lines += subprompt.lines
-            lines << 'end'
+            lines += subprompt.lines.map { |l| "      #{l}" }
+            lines << '    end'
 
             @content = lines.join("\n")
           }
@@ -44,15 +44,15 @@ module MigrationBuilder
           callback: -> {
             lines = []
             @table_name = @prompt.ask('Table name:')
-            lines << "create_table :#{@table_name} do |t|"
+            lines << "    create_table :#{@table_name} do |t|"
 
             subprompt = Subprompts::AddColumn.new(@prompt)
             subprompt.run
 
             @filename = "create_#{@table_name}"
 
-            lines += subprompt.lines
-            lines << 'end'
+            lines += subprompt.lines.map { |l| "      #{l}" }
+            lines << '    end'
 
             @content = lines.join("\n")
           }

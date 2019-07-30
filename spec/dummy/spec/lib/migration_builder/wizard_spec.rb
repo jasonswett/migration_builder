@@ -61,7 +61,7 @@ RSpec.describe MigrationBuilder::Wizard do
 
         @wizard.collect_input(prompt: prompt)
         expect(@wizard.filename).to eq('create_menu_items')
-        expect(@wizard.content).to eq(%(create_table :menu_items do |t|\nt.string :name\nend))
+        expect(@wizard.content).to eq(%(    create_table :menu_items do |t|\n      t.string :name\n    end))
       end
     end
 
@@ -156,7 +156,7 @@ RSpec.describe MigrationBuilder::Wizard do
 
         @wizard.collect_input(prompt: prompt)
         expect(@wizard.filename).to eq('add_price_cents_to_menu_items')
-        expect(@wizard.content).to eq("change_table :menu_items do |t|\nt.integer :price_cents\nend")
+        expect(@wizard.content).to eq("    change_table :menu_items do |t|\n      t.integer :price_cents\n    end")
       end
     end
   end
