@@ -1,5 +1,5 @@
 require 'tty-prompt'
-require_relative 'subprompts/add_column'
+require_relative 'subprompts/add_or_remove_column'
 require_relative 'utilities'
 
 module MigrationBuilder
@@ -14,10 +14,10 @@ module MigrationBuilder
       @prompt = prompt
 
       commands = {
-        'Add column to existing table' => {
+        'Add/remove column(s) on existing table' => {
           callback: -> {
             @table_name = prompt_for_table_name
-            subprompt = Subprompts::AddColumn.new(@prompt)
+            subprompt = Subprompts::AddOrRemoveColumn.new(@prompt)
             subprompt.run
 
             lines = []
@@ -41,7 +41,7 @@ module MigrationBuilder
         'Create new table' => {
           callback: -> {
             @table_name = @prompt.ask('Table name:')
-            subprompt = Subprompts::AddColumn.new(@prompt)
+            subprompt = Subprompts::AddOrRemoveColumn.new(@prompt, allow_remove: false)
             subprompt.run
 
             lines = []
