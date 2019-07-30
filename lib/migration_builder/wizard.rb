@@ -77,7 +77,7 @@ module MigrationBuilder
     end
 
     def table_names
-      @utility_class.table_names
+      @utility_class.table_names.sort
     end
 
     def start
