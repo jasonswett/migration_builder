@@ -1,5 +1,5 @@
 # Migration Builder
-Migration Builder is an interactive command-line tool that builds Rails migrations. The goal is for Migration Builder to be able to generate 95% of the migration types I want without me having to google the Rails migration syntax.
+Migration Builder is an interactive command-line tool that builds Rails migrations. The goal is for Migration Builder to be able to generate 95% of common migration types without having to google the Rails migration syntax.
 
 Note: Migration Builder is currently in an EXTREMELY early stage of development, so set your expectations accordingly.
 
