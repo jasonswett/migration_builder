@@ -1,5 +1,5 @@
 module MigrationBuilder
-  module Prompts
+  module Subprompts
     class AddColumn
       attr_reader :column_name, :lines, :table_name
 

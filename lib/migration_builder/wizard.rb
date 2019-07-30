@@ -1,5 +1,5 @@
 require 'tty-prompt'
-require_relative 'prompts/add_column'
+require_relative 'subprompts/add_column'
 require_relative 'utilities'
 
 module MigrationBuilder
@@ -20,12 +20,12 @@ module MigrationBuilder
             @table_name = prompt_for_table_name
             lines << "change_table :#{@table_name} do |t|"
 
-            prompt = Prompts::AddColumn.new(@prompt)
-            prompt.run
+            subprompt = Subprompts::AddColumn.new(@prompt)
+            subprompt.run
 
-            @filename = "add_#{prompt.column_name}_to_#{@table_name}"
+            @filename = "add_#{subprompt.column_name}_to_#{@table_name}"
 
-            lines += prompt.lines
+            lines += subprompt.lines
             lines << 'end'
 
             @content = lines.join("\n")
@@ -46,12 +46,12 @@ module MigrationBuilder
             @table_name = @prompt.ask('Table name:')
             lines << "create_table :#{@table_name} do |t|"
 
-            prompt = Prompts::AddColumn.new(@prompt)
-            prompt.run
+            subprompt = Subprompts::AddColumn.new(@prompt)
+            subprompt.run
 
             @filename = "create_#{@table_name}"
 
-            lines += prompt.lines
+            lines += subprompt.lines
             lines << 'end'
 
             @content = lines.join("\n")
