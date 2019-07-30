@@ -6,12 +6,13 @@ module MigrationBuilder
   class Wizard
     attr_reader :content, :filename
 
-    def initialize(prompt: TTY::Prompt.new, utility_class: Utilities)
-      @prompt = prompt
+    def initialize(utility_class: Utilities)
       @utility_class = utility_class
     end
 
-    def collect_input
+    def collect_input(prompt: TTY::Prompt.new)
+      @prompt = prompt
+
       commands = {
         'Add column to existing table' => {
           callback: -> {

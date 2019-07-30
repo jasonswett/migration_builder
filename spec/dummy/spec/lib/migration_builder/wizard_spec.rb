@@ -4,6 +4,10 @@ require 'stringio'
 RSpec.describe MigrationBuilder::Wizard do
   context 'no existing tables' do
     it 'does not offer any altering options' do
+      utility_class = double()
+      expect(utility_class).to receive(:table_names).and_return([])
+      wizard = MigrationBuilder::Wizard.new(utility_class: utility_class)
+
       prompt = FakePrompt.new([
         {
           expected_question: 'What would you like to do?',
@@ -13,9 +17,7 @@ RSpec.describe MigrationBuilder::Wizard do
         }
       ])
 
-      utility_class = double()
-      expect(utility_class).to receive(:table_names).and_return([])
-      MigrationBuilder::Wizard.new(prompt: prompt, utility_class: utility_class).collect_input
+      wizard.collect_input(prompt: prompt)
     end
   end
 
@@ -28,6 +30,8 @@ RSpec.describe MigrationBuilder::Wizard do
         'menu_items',
         'orders'
       ])
+
+      @wizard = MigrationBuilder::Wizard.new(utility_class: @utility_class)
     end
 
     describe 'create table' do
@@ -55,11 +59,9 @@ RSpec.describe MigrationBuilder::Wizard do
           }
         ])
 
-        migration_builder = MigrationBuilder::Wizard.new(prompt: prompt, utility_class: @utility_class)
-        migration_builder.collect_input
-
-        expect(migration_builder.filename).to eq('create_menu_items')
-        expect(migration_builder.content).to eq(%(create_table :menu_items do |t|\nt.string :name\nend))
+        @wizard.collect_input(prompt: prompt)
+        expect(@wizard.filename).to eq('create_menu_items')
+        expect(@wizard.content).to eq(%(create_table :menu_items do |t|\nt.string :name\nend))
       end
     end
 
@@ -79,11 +81,9 @@ RSpec.describe MigrationBuilder::Wizard do
           },
         ])
 
-        migration_builder = MigrationBuilder::Wizard.new(prompt: prompt, utility_class: @utility_class)
-        migration_builder.collect_input
-
-        expect(migration_builder.filename).to eq('drop_menu_items')
-        expect(migration_builder.content).to eq('drop_table :menu_items')
+        @wizard.collect_input(prompt: prompt)
+        expect(@wizard.filename).to eq('drop_menu_items')
+        expect(@wizard.content).to eq('drop_table :menu_items')
       end
     end
 
@@ -107,11 +107,9 @@ RSpec.describe MigrationBuilder::Wizard do
           }
         ])
 
-        migration_builder = MigrationBuilder::Wizard.new(prompt: prompt, utility_class: @utility_class)
-        migration_builder.collect_input
-
-        expect(migration_builder.filename).to eq('rename_menu_items_to_tasty_menu_items')
-        expect(migration_builder.content).to eq("rename_table :menu_items, :tasty_menu_items")
+        @wizard.collect_input(prompt: prompt)
+        expect(@wizard.filename).to eq('rename_menu_items_to_tasty_menu_items')
+        expect(@wizard.content).to eq("rename_table :menu_items, :tasty_menu_items")
       end
     end
 
@@ -156,11 +154,9 @@ RSpec.describe MigrationBuilder::Wizard do
           },
         ])
 
-        migration_builder = MigrationBuilder::Wizard.new(prompt: prompt, utility_class: @utility_class)
-        migration_builder.collect_input
-
-        expect(migration_builder.filename).to eq('add_price_cents_to_menu_items')
-        expect(migration_builder.content).to eq("change_table :menu_items do |t|\nt.integer :price_cents\nend")
+        @wizard.collect_input(prompt: prompt)
+        expect(@wizard.filename).to eq('add_price_cents_to_menu_items')
+        expect(@wizard.content).to eq("change_table :menu_items do |t|\nt.integer :price_cents\nend")
       end
     end
   end
