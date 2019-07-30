@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe MigrationBuilder::Wizard do
+  before do
+    utility_class = double()
+    expect(utility_class).to receive(:table_names).and_return([])
+    @wizard = MigrationBuilder::Wizard.new(utility_class: utility_class)
+  end
+
   context 'no existing tables' do
     it 'does not offer any altering options' do
-      utility_class = double()
-      expect(utility_class).to receive(:table_names).and_return([])
-      wizard = MigrationBuilder::Wizard.new(utility_class: utility_class)
-
       prompt = FakePrompt.new([
         {
           expected_question: 'What would you like to do?',
@@ -16,7 +18,7 @@ RSpec.describe MigrationBuilder::Wizard do
         }
       ])
 
-      wizard.collect_input(prompt: prompt)
+      @wizard.collect_input(prompt: prompt)
     end
   end
 end
