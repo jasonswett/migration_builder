@@ -29,6 +29,15 @@ Or install it yourself as:
 $ gem install migration_builder
 ```
 
+## Capabilities
+
+Migration Builder features currently include:
+
+- Adding/removing column(s) on existing tables
+- Renaming existing tables
+- Creating new tables
+- Dropping existing tables
+
 ## Feedback and contributing
 This is my first swing at OSS and I have no idea how it works. If you find a bug (which is really easy at this stage!) or have a feature idea (also easy since Migration Builder does almost nothing so far!), feel free to open an issue on this repo.
 
