@@ -56,12 +56,29 @@ RSpec.describe MigrationBuilder::Wizard do
             expected_question: 'Column type for name:',
             assert_options: -> options { expect(options).to include('string') },
             response: 'string'
-          }
+          },
+          {
+            expected_question: 'Add another?',
+            response: 'y'
+          },
+          {
+            expected_question: 'Column name:',
+            response: 'price_cents'
+          },
+          {
+            expected_question: 'Column type for price_cents:',
+            assert_options: -> options { expect(options).to include('integer') },
+            response: 'integer'
+          },
+          {
+            expected_question: 'Add another?',
+            response: 'n'
+          },
         ])
 
         @wizard.collect_input(prompt: prompt)
         expect(@wizard.filename).to eq('create_menu_items')
-        expect(@wizard.content).to eq(%(    create_table :menu_items do |t|\n      t.string :name\n    end))
+        expect(@wizard.content).to eq(%(    create_table :menu_items do |t|\n      t.string :name\n      t.integer :price_cents\n    end))
       end
     end
 
@@ -151,6 +168,10 @@ RSpec.describe MigrationBuilder::Wizard do
               ))
             end,
             response: 'integer'
+          },
+          {
+            expected_question: 'Add another?',
+            response: 'n'
           },
         ])
 

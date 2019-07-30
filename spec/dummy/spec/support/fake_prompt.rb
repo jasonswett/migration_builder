@@ -16,6 +16,7 @@ class FakePrompt
 
   def accept_input(question, *args)
     command = @commands[@index]
+    raise "Expecting command for question \"#{question}\"" unless command
 
     if command[:expected_question] != question
       raise "Script command \"#{command[:expected_question]}\" does not match question \"#{question}\""
