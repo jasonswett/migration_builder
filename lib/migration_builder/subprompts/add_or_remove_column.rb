@@ -1,22 +1,6 @@
 module MigrationBuilder
   module Subprompts
     class AddOrRemoveColumn
-      COLUMN_TYPES = %w(
-        string
-        text
-        integer
-        bigint
-        float
-        decimal
-        numeric
-        datetime
-        time
-        date
-        binary
-        boolean
-        primary_key
-      )
-
       attr_reader :column_name, :lines
 
       def initialize(prompt, allow_remove: true)
