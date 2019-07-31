@@ -18,18 +18,18 @@ RSpec.describe MigrationBuilder::Wizard do
           response: 'menu_items'
         },
         {
-          expected_question: 'Add or remove?',
+          expected_question: 'Add column or remove column?',
           assert_options: -> options do
-            expect(options).to eq(%w(Add Remove))
+            expect(options).to eq(['Add column', 'Remove column'])
           end,
-          response: 'Add'
+          response: 'Add column'
         },
         {
           expected_question: 'Column name:',
           response: 'price_cents'
         },
         {
-          expected_question: 'Column type for price_cents:',
+          expected_question: 'Type for column price_cents:',
           assert_options: -> options do
             expect(options).to eq(%w(
               string

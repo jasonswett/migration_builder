@@ -22,7 +22,7 @@ RSpec.describe MigrationBuilder::Wizard do
           response: 'name'
         },
         {
-          expected_question: 'Column type for name:',
+          expected_question: 'Type for column name:',
           assert_options: -> options { expect(options).to include('string') },
           response: 'string'
         },
@@ -35,7 +35,7 @@ RSpec.describe MigrationBuilder::Wizard do
           response: 'price_cents'
         },
         {
-          expected_question: 'Column type for price_cents:',
+          expected_question: 'Type for column price_cents:',
           assert_options: -> options { expect(options).to include('integer') },
           response: 'integer'
         },

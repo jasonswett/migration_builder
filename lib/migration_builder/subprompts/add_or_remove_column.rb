@@ -15,7 +15,7 @@ module MigrationBuilder
         add_another = true
 
         while add_another
-          add_or_remove = @allow_remove ? @prompt.enum_select('Add or remove?', ['Add', 'Remove']) : 'Add'
+          add_or_remove = @allow_remove ? @prompt.enum_select('Add column or remove column?', ['Add column', 'Remove column']) : 'Add column'
           @column_name = @prompt.ask('Column name:')
           @lines << line(@column_name, add_or_remove)
           add_another = @prompt.yes?(add_another_question)
@@ -38,8 +38,8 @@ module MigrationBuilder
       end
 
       def line(column_name, add_or_remove)
-        if add_or_remove == 'Add'
-          column_type = @prompt.enum_select("Column type for #{column_name}:", COLUMN_TYPES)
+        if add_or_remove == 'Add column'
+          column_type = @prompt.enum_select("Type for column #{column_name}:", COLUMN_TYPES)
           "t.#{column_type} :#{column_name}"
         else
           "t.remove :#{column_name}"
