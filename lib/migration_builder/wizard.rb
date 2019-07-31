@@ -31,7 +31,7 @@ module MigrationBuilder
         },
         'Rename existing table' => {
           callback: -> {
-            prompt_for_table_name
+            @table_name = prompt_for_table_name
             new_table_name = @prompt.ask('New name:')
 
             @filename = "rename_#{@table_name}_to_#{new_table_name}"
@@ -55,7 +55,7 @@ module MigrationBuilder
         },
         'Drop existing table' => {
           callback: -> {
-            prompt_for_table_name
+            @table_name = prompt_for_table_name
             @filename = "drop_#{@table_name}"
             @content = "drop_table :#{@table_name}"
           }
@@ -73,7 +73,7 @@ module MigrationBuilder
     end
 
     def prompt_for_table_name
-      @table_name = @prompt.enum_select('Which table?', table_names, per_page: 30)
+      @prompt.enum_select('Which table?', table_names, per_page: 30)
     end
 
     def table_names
