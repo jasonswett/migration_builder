@@ -51,7 +51,7 @@ RSpec.describe MigrationBuilder::Wizard do
         },
         {
           expected_question: 'Add/remove another?',
-          response: 'n'
+          response: false
         },
       ])
 

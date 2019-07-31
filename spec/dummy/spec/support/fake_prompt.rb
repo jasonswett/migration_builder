@@ -12,6 +12,10 @@ class FakePrompt
     accept_input(question)
   end
 
+  def yes?(question)
+    accept_input(question)
+  end
+
   private
 
   def accept_input(question, *args)

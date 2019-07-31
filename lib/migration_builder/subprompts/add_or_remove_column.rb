@@ -26,10 +26,9 @@ module MigrationBuilder
       end
 
       def run
-        add_another = nil
+        add_another = true
 
-        while add_another != 'n'
-          puts "allow_remove is #{@allow_remove}"
+        while add_another
           add_or_remove = @allow_remove ? @prompt.enum_select('Add or remove?', ['Add', 'Remove']) : 'Add'
 
           @column_name = @prompt.ask('Column name:')
@@ -42,7 +41,7 @@ module MigrationBuilder
           end
 
           question = @allow_remove ? 'Add/remove another?' : 'Add another?'
-          add_another = @prompt.ask(question)
+          add_another = @prompt.yes?(question)
         end
       end
     end

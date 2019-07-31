@@ -28,7 +28,7 @@ RSpec.describe MigrationBuilder::Wizard do
         },
         {
           expected_question: 'Add another?',
-          response: 'y'
+          response: true
         },
         {
           expected_question: 'Column name:',
@@ -41,7 +41,7 @@ RSpec.describe MigrationBuilder::Wizard do
         },
         {
           expected_question: 'Add another?',
-          response: 'n'
+          response: false
         },
       ])
 
