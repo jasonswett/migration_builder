@@ -3,10 +3,12 @@ module MigrationBuilder
     class AddOrRemoveColumn
       attr_reader :column_name, :lines
 
-      def initialize(prompt, allow_remove: true)
-        @prompt = prompt
-        @lines = []
-        @allow_remove = allow_remove
+      def initialize(change_or_create, prompt, table_name)
+        @prompt           = prompt
+        @table_name       = table_name
+        @change_or_create = change_or_create
+        @allow_remove     = change_or_create == 'change'
+        @lines            = []
       end
 
       def run
@@ -18,6 +20,15 @@ module MigrationBuilder
           @lines << line(@column_name, add_or_remove)
           add_another = @prompt.yes?(add_another_question)
         end
+      end
+
+      def content
+        lines = []
+        lines << "    #{@change_or_create}_table :#{@table_name} do |t|"
+        lines += @lines.map { |l| "      #{l}" }
+        lines << '    end'
+
+        @content = lines.join("\n")
       end
 
       private

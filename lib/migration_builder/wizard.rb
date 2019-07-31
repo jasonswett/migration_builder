@@ -17,15 +17,16 @@ module MigrationBuilder
         'Add/remove column(s) on existing table' => {
           callback: -> {
             @table_name = prompt_for_table_name
-            subprompt = Subprompts::AddOrRemoveColumn.new(@prompt)
+
+            subprompt = Subprompts::AddOrRemoveColumn.new(
+              'change',
+              @prompt,
+              @table_name
+            )
+
             subprompt.run
 
-            lines = []
-            lines << "    change_table :#{@table_name} do |t|"
-            lines += subprompt.lines.map { |l| "      #{l}" }
-            lines << '    end'
-
-            @content = lines.join("\n")
+            @content = subprompt.content
             @filename = "add_#{subprompt.column_name}_to_#{@table_name}"
           }
         },
@@ -41,15 +42,16 @@ module MigrationBuilder
         'Create new table' => {
           callback: -> {
             @table_name = @prompt.ask('Table name:')
-            subprompt = Subprompts::AddOrRemoveColumn.new(@prompt, allow_remove: false)
+
+            subprompt = Subprompts::AddOrRemoveColumn.new(
+              'create',
+              @prompt,
+              @table_name
+            )
+
             subprompt.run
 
-            lines = []
-            lines << "    create_table :#{@table_name} do |t|"
-            lines += subprompt.lines.map { |l| "      #{l}" }
-            lines << '    end'
-
-            @content = lines.join("\n")
+            @content = subprompt.content
             @filename = "create_#{@table_name}"
           }
         },
