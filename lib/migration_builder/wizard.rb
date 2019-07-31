@@ -59,7 +59,7 @@ module MigrationBuilder
           callback: -> {
             @table_name = prompt_for_table_name
             @filename = "drop_#{@table_name}"
-            @content = "drop_table :#{@table_name}"
+            @content = "    drop_table :#{@table_name}"
           }
         }
       }

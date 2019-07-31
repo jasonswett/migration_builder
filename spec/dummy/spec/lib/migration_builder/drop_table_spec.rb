@@ -21,7 +21,7 @@ RSpec.describe MigrationBuilder::Wizard do
 
       wizard.collect_input(prompt: prompt)
       expect(wizard.filename).to eq('drop_menu_items')
-      expect(wizard.content).to eq('drop_table :menu_items')
+      expect(wizard.content).to eq('    drop_table :menu_items')
     end
   end
 end
