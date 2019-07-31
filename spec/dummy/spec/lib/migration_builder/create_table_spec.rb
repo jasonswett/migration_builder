@@ -27,6 +27,10 @@ RSpec.describe MigrationBuilder::Wizard do
           response: 'string'
         },
         {
+          expected_question: 'Nullable?',
+          response: 'unspecified'
+        },
+        {
           expected_question: 'Add another?',
           response: true
         },
@@ -38,6 +42,10 @@ RSpec.describe MigrationBuilder::Wizard do
           expected_question: 'Type for column price_cents:',
           assert_options: -> options { expect(options).to include('integer') },
           response: 'integer'
+        },
+        {
+          expected_question: 'Nullable?',
+          response: 'unspecified'
         },
         {
           expected_question: 'Add another?',

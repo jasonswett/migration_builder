@@ -40,7 +40,13 @@ module MigrationBuilder
       def line(column_name, add_or_remove)
         if add_or_remove == 'Add column'
           column_type = @prompt.enum_select("Type for column #{column_name}:", COLUMN_TYPES)
-          "t.#{column_type} :#{column_name}"
+
+          nullable = @prompt.enum_select('Nullable?', ['false', 'true', 'unspecified'])
+          if nullable == 'unspecified'
+            "t.#{column_type} :#{column_name}"
+          else
+            "t.#{column_type} :#{column_name}, null: #{nullable}"
+          end
         else
           "t.remove :#{column_name}"
         end

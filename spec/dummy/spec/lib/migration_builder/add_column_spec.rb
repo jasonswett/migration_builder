@@ -4,8 +4,8 @@ RSpec.describe MigrationBuilder::Wizard do
   let(:wizard) { default_wizard }
 
   describe 'add column' do
-    it 'generates add_column code' do
-      prompt = FakePrompt.new([
+    before do
+      @commands = [
         {
           expected_question: 'What would you like to do?',
           assert_options: -> options do
@@ -49,15 +49,85 @@ RSpec.describe MigrationBuilder::Wizard do
           end,
           response: 'integer'
         },
-        {
-          expected_question: 'Add/remove another?',
-          response: false
-        },
-      ])
+      ]
+    end
 
-      wizard.collect_input(prompt: prompt)
-      expect(wizard.filename).to eq('add_price_cents_to_menu_items')
-      expect(wizard.content).to eq("    change_table :menu_items do |t|\n      t.integer :price_cents\n    end")
+    context 'not nullable' do
+      it 'generates add_column code with null: false' do
+        @commands += [
+          {
+            expected_question: 'Nullable?',
+            assert_options: -> options do
+              expect(options).to eq([
+                'false',
+                'true',
+                'unspecified'
+              ])
+            end,
+            response: 'false'
+          },
+          {
+            expected_question: 'Add/remove another?',
+            response: false
+          },
+        ]
+
+        wizard.collect_input(prompt: FakePrompt.new(@commands))
+        expect(wizard.filename).to eq('add_price_cents_to_menu_items')
+        expect(wizard.content).to eq("    change_table :menu_items do |t|\n      t.integer :price_cents, null: false\n    end")
+      end
+    end
+
+    context 'nullable' do
+      it 'generates add_column code with null: true' do
+        @commands += [
+          {
+            expected_question: 'Nullable?',
+            assert_options: -> options do
+              expect(options).to eq([
+                'false',
+                'true',
+                'unspecified'
+              ])
+            end,
+            response: 'true'
+          },
+          {
+            expected_question: 'Add/remove another?',
+            response: false
+          },
+        ]
+
+        wizard.collect_input(prompt: FakePrompt.new(@commands))
+        expect(wizard.filename).to eq('add_price_cents_to_menu_items')
+        expect(wizard.content).to eq("    change_table :menu_items do |t|\n      t.integer :price_cents, null: true\n    end")
+      end
+    end
+
+    context 'nullable unspecified' do
+      it 'generates add_column code without null argument' do
+        @commands += [
+          {
+            expected_question: 'Nullable?',
+            assert_options: -> options do
+              expect(options).to eq([
+                'false',
+                'true',
+                'unspecified'
+              ])
+            end,
+            response: 'unspecified'
+          },
+          {
+            expected_question: 'Add/remove another?',
+            response: false
+          },
+        ]
+
+        wizard.collect_input(prompt: FakePrompt.new(@commands))
+        expect(wizard.filename).to eq('add_price_cents_to_menu_items')
+        expect(wizard.content).to eq("    change_table :menu_items do |t|\n      t.integer :price_cents\n    end")
+      end
     end
   end
 end
