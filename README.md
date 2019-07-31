@@ -33,7 +33,8 @@ $ gem install migration_builder
 
 Migration Builder features currently include:
 
-- Adding/removing column(s) on existing tables
+- Adding columns on existing tables (including null constraints)
+- Removing columns from existing tables
 - Renaming existing tables
 - Creating new tables
 - Dropping existing tables
