@@ -1,14 +1,14 @@
 module MigrationBuilder
   module Subprompts
     class AddOrRemoveColumn
-      attr_reader :column_name, :lines
+      attr_reader :column_name
 
       def initialize(change_or_create, prompt, table_name)
         @prompt           = prompt
         @table_name       = table_name
         @change_or_create = change_or_create
         @allow_remove     = change_or_create == 'change'
-        @lines            = []
+        @operations       = []
       end
 
       def run
@@ -17,18 +17,18 @@ module MigrationBuilder
         while add_another
           add_or_remove = @allow_remove ? @prompt.enum_select('Add column or remove column?', ['Add column', 'Remove column']) : 'Add column'
           @column_name = @prompt.ask('Column name:')
-          @lines << line(@column_name, add_or_remove)
+          @operations << operation(@column_name, add_or_remove)
           add_another = @prompt.yes?(add_another_question)
         end
       end
 
       def content
-        lines = []
-        lines << "    #{@change_or_create}_table :#{@table_name} do |t|"
-        lines += @lines.map { |l| "      #{l}" }
-        lines << '    end'
+        operations = []
+        operations << "    #{@change_or_create}_table :#{@table_name} do |t|"
+        operations += @operations.map { |l| "      #{l}" }
+        operations << '    end'
 
-        @content = lines.join("\n")
+        @content = operations.join("\n")
       end
 
       private
@@ -37,7 +37,7 @@ module MigrationBuilder
         @allow_remove ? 'Add/remove another?' : 'Add another?'
       end
 
-      def line(column_name, add_or_remove)
+      def operation(column_name, add_or_remove)
         if add_or_remove == 'Add column'
           column_type = @prompt.enum_select("Type for column #{column_name}:", COLUMN_TYPES)
 
