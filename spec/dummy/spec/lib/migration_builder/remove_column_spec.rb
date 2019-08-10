@@ -35,7 +35,7 @@ RSpec.describe MigrationBuilder::Wizard do
       ])
 
       wizard.collect_input(prompt: prompt)
-      expect(wizard.filename).to eq('add_price_cents_to_menu_items')
+      expect(wizard.filename).to eq('remove_price_cents_from_menu_items')
       expect(wizard.content).to eq("    change_table :menu_items do |t|\n      t.remove :price_cents\n    end")
     end
   end

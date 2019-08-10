@@ -1,7 +1,7 @@
 module MigrationBuilder
   module Subprompts
     class AddOrRemoveColumn
-      attr_reader :column_name
+      attr_reader :column_name, :filename
 
       def initialize(change_or_create, prompt, table_name)
         @prompt           = prompt
@@ -39,15 +39,19 @@ module MigrationBuilder
 
       def operation(column_name, add_or_remove)
         if add_or_remove == 'Add column'
+          @filename = "add_#{column_name}_to_#{@table_name}"
+
           column_type = @prompt.enum_select("Type for column #{column_name}:", COLUMN_TYPES)
 
           nullable = @prompt.enum_select('Nullable?', ['false', 'true', 'unspecified'])
+
           if nullable == 'unspecified'
             "t.#{column_type} :#{column_name}"
           else
             "t.#{column_type} :#{column_name}, null: #{nullable}"
           end
         else
+          @filename = "remove_#{column_name}_from_#{@table_name}"
           "t.remove :#{column_name}"
         end
       end

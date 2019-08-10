@@ -27,7 +27,7 @@ module MigrationBuilder
             subprompt.run
 
             @content = subprompt.content
-            @filename = "add_#{subprompt.column_name}_to_#{@table_name}"
+            @filename = subprompt.filename
           }
         },
         'Rename existing table' => {
