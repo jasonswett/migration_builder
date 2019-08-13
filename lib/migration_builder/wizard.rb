@@ -19,9 +19,10 @@ module MigrationBuilder
             @table_name = prompt_for_table_name
 
             subprompt = Subprompts::Column.new(
-              'change',
-              @prompt,
-              @table_name
+              change_or_create: 'change',
+              prompt: @prompt,
+              table_name: @table_name,
+              utility_class: @utility_class
             )
 
             subprompt.run
@@ -44,9 +45,10 @@ module MigrationBuilder
             @table_name = @prompt.ask('Table name:')
 
             subprompt = Subprompts::Column.new(
-              'create',
-              @prompt,
-              @table_name
+              change_or_create: 'create',
+              prompt: @prompt,
+              table_name: @table_name,
+              utility_class: @utility_class
             )
 
             subprompt.run

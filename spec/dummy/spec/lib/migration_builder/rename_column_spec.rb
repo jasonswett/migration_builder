@@ -25,7 +25,10 @@ RSpec.describe MigrationBuilder::Wizard do
           response: 'Rename column'
         },
         {
-          expected_question: 'Column name:',
+          expected_question: 'Column to rename:',
+          assert_options: -> options do
+            expect(options).to eq(['name', 'price'])
+          end,
           response: 'price'
         },
         {

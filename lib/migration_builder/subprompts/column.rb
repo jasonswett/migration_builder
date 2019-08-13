@@ -3,12 +3,15 @@ module MigrationBuilder
     class Column
       attr_reader :column_name, :filename
 
-      def initialize(change_or_create, prompt, table_name)
-        @prompt           = prompt
-        @table_name       = table_name
+      def initialize(change_or_create:, prompt:, table_name:, utility_class:)
         @change_or_create = change_or_create
         @allow_remove     = change_or_create == 'change'
-        @operations       = []
+
+        @prompt        = prompt
+        @table_name    = table_name
+        @utility_class = utility_class
+
+        @operations = []
       end
 
       def run
@@ -16,7 +19,12 @@ module MigrationBuilder
         selection = prompt_for_selection
 
         while add_another
-          @column_name = @prompt.ask('Column name:')
+          if selection == 'Rename column'
+            @column_name = @prompt.enum_select('Column to rename:', @utility_class.column_names(@table_name))
+          else
+            @column_name = @prompt.ask('Column name:')
+          end
+
           @operations << operation(@column_name, selection)
           add_another = @prompt.yes?(add_another_question)
         end

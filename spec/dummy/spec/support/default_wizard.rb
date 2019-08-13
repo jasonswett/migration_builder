@@ -7,5 +7,10 @@ def default_wizard
     'orders'
   ])
 
+  allow(utility_class).to receive(:column_names).and_return([
+    'name',
+    'price'
+  ])
+
   MigrationBuilder::Wizard.new(utility_class: utility_class)
 end
