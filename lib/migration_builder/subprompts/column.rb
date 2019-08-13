@@ -72,7 +72,7 @@ module MigrationBuilder
         elsif selection == 'Rename column'
           new_column_name = @prompt.ask('New column name:')
           @filename = "rename_#{@table_name}_#{column_name}_to_#{new_column_name}"
-          "t.rename :#{column_name}, #{new_column_name}"
+          "t.rename :#{column_name}, :#{new_column_name}"
         else
           @filename = "remove_#{column_name}_from_#{@table_name}"
           "t.remove :#{column_name}"

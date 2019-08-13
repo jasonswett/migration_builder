@@ -43,7 +43,7 @@ RSpec.describe MigrationBuilder::Wizard do
 
       wizard.collect_input(prompt: prompt)
       expect(wizard.filename).to eq('rename_menu_items_price_to_price_cents')
-      expect(wizard.content).to eq("    change_table :menu_items do |t|\n      t.rename :price, price_cents\n    end")
+      expect(wizard.content).to eq("    change_table :menu_items do |t|\n      t.rename :price, :price_cents\n    end")
     end
   end
 end
