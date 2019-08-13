@@ -13,9 +13,9 @@ module MigrationBuilder
 
       def run
         add_another = true
+        selection = prompt_for_selection
 
         while add_another
-          selection = @allow_remove ? @prompt.enum_select('Add, rename or remove column?', ['Add column', 'Rename column', 'Remove column']) : 'Add column'
           @column_name = @prompt.ask('Column name:')
           @operations << operation(@column_name, selection)
           add_another = @prompt.yes?(add_another_question)
@@ -32,6 +32,17 @@ module MigrationBuilder
       end
 
       private
+
+      def prompt_for_selection
+        if @allow_remove
+          @prompt.enum_select(
+            'Add, rename or remove column?',
+            ['Add column', 'Rename column', 'Remove column']
+          )
+        else
+          'Add column'
+        end
+      end
 
       def add_another_question
         @allow_remove ? 'Add/rename/remove another?' : 'Add another?'
