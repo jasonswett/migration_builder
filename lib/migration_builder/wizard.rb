@@ -1,5 +1,5 @@
 require 'tty-prompt'
-require_relative 'subprompts/add_or_remove_column'
+require_relative 'subprompts/column'
 require_relative 'utilities'
 
 module MigrationBuilder
@@ -18,7 +18,7 @@ module MigrationBuilder
           callback: -> {
             @table_name = prompt_for_table_name
 
-            subprompt = Subprompts::AddOrRemoveColumn.new(
+            subprompt = Subprompts::Column.new(
               'change',
               @prompt,
               @table_name
@@ -43,7 +43,7 @@ module MigrationBuilder
           callback: -> {
             @table_name = @prompt.ask('Table name:')
 
-            subprompt = Subprompts::AddOrRemoveColumn.new(
+            subprompt = Subprompts::Column.new(
               'create',
               @prompt,
               @table_name

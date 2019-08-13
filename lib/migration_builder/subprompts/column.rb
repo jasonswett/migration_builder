@@ -1,6 +1,6 @@
 module MigrationBuilder
   module Subprompts
-    class AddOrRemoveColumn
+    class Column
       attr_reader :column_name, :filename
 
       def initialize(change_or_create, prompt, table_name)
