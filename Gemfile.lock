@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    migration_builder (0.1.0)
+    migration_builder (0.1.1)
       rails (~> 6.0.0.rc1)
       tty-prompt
 

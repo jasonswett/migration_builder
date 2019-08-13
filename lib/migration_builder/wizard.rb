@@ -14,7 +14,7 @@ module MigrationBuilder
       @prompt = prompt
 
       commands = {
-        'Add/remove column(s) on existing table' => {
+        'Add/rename/remove column(s) on existing table' => {
           callback: -> {
             @table_name = prompt_for_table_name
 

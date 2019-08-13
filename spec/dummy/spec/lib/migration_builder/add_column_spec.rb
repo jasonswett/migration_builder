@@ -9,18 +9,18 @@ RSpec.describe MigrationBuilder::Wizard do
         {
           expected_question: 'What would you like to do?',
           assert_options: -> options do
-            expect(options).to include('Add/remove column(s) on existing table')
+            expect(options).to include('Add/rename/remove column(s) on existing table')
           end,
-          response: 'Add/remove column(s) on existing table'
+          response: 'Add/rename/remove column(s) on existing table'
         },
         {
           expected_question: 'Which table?',
           response: 'menu_items'
         },
         {
-          expected_question: 'Add column or remove column?',
+          expected_question: 'Add, rename or remove column?',
           assert_options: -> options do
-            expect(options).to eq(['Add column', 'Remove column'])
+            expect(options).to eq(['Add column', 'Rename column', 'Remove column'])
           end,
           response: 'Add column'
         },
@@ -67,7 +67,7 @@ RSpec.describe MigrationBuilder::Wizard do
             response: 'false'
           },
           {
-            expected_question: 'Add/remove another?',
+            expected_question: 'Add/rename/remove another?',
             response: false
           },
         ]
@@ -93,7 +93,7 @@ RSpec.describe MigrationBuilder::Wizard do
             response: 'true'
           },
           {
-            expected_question: 'Add/remove another?',
+            expected_question: 'Add/rename/remove another?',
             response: false
           },
         ]
@@ -119,7 +119,7 @@ RSpec.describe MigrationBuilder::Wizard do
             response: 'unspecified'
           },
           {
-            expected_question: 'Add/remove another?',
+            expected_question: 'Add/rename/remove another?',
             response: false
           },
         ]

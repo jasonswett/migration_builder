@@ -15,9 +15,9 @@ module MigrationBuilder
         add_another = true
 
         while add_another
-          add_or_remove = @allow_remove ? @prompt.enum_select('Add column or remove column?', ['Add column', 'Remove column']) : 'Add column'
+          selection = @allow_remove ? @prompt.enum_select('Add, rename or remove column?', ['Add column', 'Rename column', 'Remove column']) : 'Add column'
           @column_name = @prompt.ask('Column name:')
-          @operations << operation(@column_name, add_or_remove)
+          @operations << operation(@column_name, selection)
           add_another = @prompt.yes?(add_another_question)
         end
       end
@@ -34,15 +34,13 @@ module MigrationBuilder
       private
 
       def add_another_question
-        @allow_remove ? 'Add/remove another?' : 'Add another?'
+        @allow_remove ? 'Add/rename/remove another?' : 'Add another?'
       end
 
-      def operation(column_name, add_or_remove)
-        if add_or_remove == 'Add column'
+      def operation(column_name, selection)
+        if selection == 'Add column'
           @filename = "add_#{column_name}_to_#{@table_name}"
-
           column_type = @prompt.enum_select("Type for column #{column_name}:", COLUMN_TYPES)
-
           nullable = @prompt.enum_select('Nullable?', ['false', 'true', 'unspecified'])
 
           if nullable == 'unspecified'
@@ -50,6 +48,10 @@ module MigrationBuilder
           else
             "t.#{column_type} :#{column_name}, null: #{nullable}"
           end
+        elsif selection == 'Rename column'
+          new_column_name = @prompt.ask('New column name:')
+          @filename = "rename_#{@table_name}_#{column_name}_to_#{new_column_name}"
+          "t.rename :#{column_name}, #{new_column_name}"
         else
           @filename = "remove_#{column_name}_from_#{@table_name}"
           "t.remove :#{column_name}"

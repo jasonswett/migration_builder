@@ -22,10 +22,14 @@ RSpec.describe MigrationBuilder::Wizard do
           assert_options: -> options do
             expect(options).to eq(['Add column', 'Rename column', 'Remove column'])
           end,
-          response: 'Remove column'
+          response: 'Rename column'
         },
         {
           expected_question: 'Column name:',
+          response: 'price'
+        },
+        {
+          expected_question: 'New column name:',
           response: 'price_cents'
         },
         {
@@ -35,8 +39,8 @@ RSpec.describe MigrationBuilder::Wizard do
       ])
 
       wizard.collect_input(prompt: prompt)
-      expect(wizard.filename).to eq('remove_price_cents_from_menu_items')
-      expect(wizard.content).to eq("    change_table :menu_items do |t|\n      t.remove :price_cents\n    end")
+      expect(wizard.filename).to eq('rename_menu_items_price_to_price_cents')
+      expect(wizard.content).to eq("    change_table :menu_items do |t|\n      t.rename :price, price_cents\n    end")
     end
   end
 end
