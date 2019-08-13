@@ -25,7 +25,10 @@ RSpec.describe MigrationBuilder::Wizard do
           response: 'Remove column'
         },
         {
-          expected_question: 'Column name:',
+          expected_question: 'Column to remove:',
+          assert_options: -> options do
+            expect(options).to eq(['name', 'price'])
+          end,
           response: 'price_cents'
         },
         {

@@ -21,6 +21,8 @@ module MigrationBuilder
         while add_another
           if selection == 'Rename column'
             @column_name = @prompt.enum_select('Column to rename:', @utility_class.column_names(@table_name))
+          elsif selection == 'Remove column'
+            @column_name = @prompt.enum_select('Column to remove:', @utility_class.column_names(@table_name))
           else
             @column_name = @prompt.ask('Column name:')
           end
