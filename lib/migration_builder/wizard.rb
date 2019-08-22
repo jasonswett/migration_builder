@@ -1,5 +1,6 @@
 require 'tty-prompt'
 require_relative 'subprompts/column'
+require_relative 'subprompts/index'
 require_relative 'utilities'
 
 module MigrationBuilder
@@ -20,6 +21,22 @@ module MigrationBuilder
 
             subprompt = Subprompts::Column.new(
               change_or_create: 'change',
+              prompt: @prompt,
+              table_name: @table_name,
+              utility_class: @utility_class
+            )
+
+            subprompt.run
+
+            @content = subprompt.content
+            @filename = subprompt.filename
+          }
+        },
+        'Add unique index on existing table' => {
+          callback: -> {
+            @table_name = prompt_for_table_name
+
+            subprompt = Subprompts::Index.new(
               prompt: @prompt,
               table_name: @table_name,
               utility_class: @utility_class
