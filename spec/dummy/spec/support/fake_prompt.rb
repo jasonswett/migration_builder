@@ -4,7 +4,7 @@ class FakePrompt
     @index = 0
   end
 
-  def enum_select(question, *args)
+  def default_select(question, *args)
     accept_input(question, args[0])
   end
 

@@ -20,9 +20,9 @@ module MigrationBuilder
 
         while add_another
           if selection == 'Rename column'
-            @column_name = @prompt.enum_select('Column to rename:', @utility_class.column_names(@table_name), per_page: 30)
+            @column_name = @prompt.default_select('Column to rename:', @utility_class.column_names(@table_name))
           elsif selection == 'Remove column'
-            @column_name = @prompt.enum_select('Column to remove:', @utility_class.column_names(@table_name), per_page: 30)
+            @column_name = @prompt.default_select('Column to remove:', @utility_class.column_names(@table_name))
           else
             @column_name = @prompt.ask('Column name:')
           end
@@ -45,7 +45,7 @@ module MigrationBuilder
 
       def prompt_for_selection
         if @allow_remove
-          @prompt.enum_select(
+          @prompt.default_select(
             'Add, rename or remove column?',
             ['Add column', 'Rename column', 'Remove column']
           )
@@ -61,8 +61,8 @@ module MigrationBuilder
       def operation(column_name, selection)
         if selection == 'Add column'
           @filename = "add_#{column_name}_to_#{@table_name}"
-          column_type = @prompt.enum_select("Type for column #{column_name}:", COLUMN_TYPES)
-          nullable = @prompt.enum_select('Nullable?', ['false', 'true', 'unspecified'])
+          column_type = @prompt.default_select("Type for column #{column_name}:", COLUMN_TYPES)
+          nullable = @prompt.default_select('Nullable?', ['false', 'true', 'unspecified'])
 
           if nullable == 'unspecified'
             "t.#{column_type} :#{column_name}"

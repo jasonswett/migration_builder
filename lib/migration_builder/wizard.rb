@@ -1,6 +1,6 @@
-require 'tty-prompt'
 require_relative 'subprompts/column'
 require_relative 'subprompts/index'
+require_relative 'prompt'
 require_relative 'utilities'
 
 module MigrationBuilder
@@ -11,7 +11,7 @@ module MigrationBuilder
       @utility_class = utility_class
     end
 
-    def collect_input(prompt: TTY::Prompt.new)
+    def collect_input(prompt: Prompt.new)
       @prompt = prompt
 
       commands = {
@@ -89,12 +89,12 @@ module MigrationBuilder
         options = ['Create new table']
       end
 
-      action = @prompt.enum_select('What would you like to do?', options)
+      action = @prompt.default_select('What would you like to do?', options)
       commands[action][:callback].call if action
     end
 
     def prompt_for_table_name
-      @prompt.enum_select('Which table?', table_names, per_page: 30)
+      @prompt.default_select('Which table?', table_names)
     end
 
     def table_names

@@ -16,10 +16,9 @@ module MigrationBuilder
         add_another = true
 
         while add_another
-          column_names << @prompt.enum_select(
+          column_names << @prompt.default_select(
             'Column:',
-            @utility_class.column_names(@table_name),
-            per_page: 30
+            @utility_class.column_names(@table_name)
           )
 
           add_another = @prompt.yes?('Add another column to the index?')
