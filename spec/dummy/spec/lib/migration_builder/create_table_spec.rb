@@ -28,7 +28,7 @@ RSpec.describe MigrationBuilder::Wizard do
         },
         {
           expected_question: 'Nullable?',
-          response: 'unspecified'
+          response: 'nullable'
         },
         {
           expected_question: 'Add another?',
@@ -45,7 +45,7 @@ RSpec.describe MigrationBuilder::Wizard do
         },
         {
           expected_question: 'Nullable?',
-          response: 'unspecified'
+          response: 'nullable'
         },
         {
           expected_question: 'Add another?',

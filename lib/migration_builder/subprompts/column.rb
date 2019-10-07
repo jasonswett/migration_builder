@@ -61,13 +61,18 @@ module MigrationBuilder
       def operation(column_name, selection)
         if selection == 'Add column'
           @filename = "add_#{column_name}_to_#{@table_name}"
-          column_type = @prompt.default_select("Type for column #{column_name}:", COLUMN_TYPES)
-          nullable = @prompt.default_select('Nullable?', ['false', 'true', 'unspecified'])
 
-          if nullable == 'unspecified'
+          column_type = @prompt.default_select(
+            "Type for column #{column_name}:",
+            COLUMN_TYPES
+          )
+
+          nullable = @prompt.default_select('Nullable?', ['nullable', 'not nullable'])
+
+          if nullable == 'nullable'
             "t.#{column_type} :#{column_name}"
           else
-            "t.#{column_type} :#{column_name}, null: #{nullable}"
+            "t.#{column_type} :#{column_name}, null: false"
           end
         elsif selection == 'Rename column'
           new_column_name = @prompt.ask('New column name:')

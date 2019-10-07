@@ -59,12 +59,11 @@ RSpec.describe MigrationBuilder::Wizard do
             expected_question: 'Nullable?',
             assert_options: -> options do
               expect(options).to eq([
-                'false',
-                'true',
-                'unspecified'
+                'nullable',
+                'not nullable'
               ])
             end,
-            response: 'false'
+            response: 'not nullable'
           },
           {
             expected_question: 'Add/rename/remove another?',
@@ -79,44 +78,17 @@ RSpec.describe MigrationBuilder::Wizard do
     end
 
     context 'nullable' do
-      it 'generates add_column code with null: true' do
-        @commands += [
-          {
-            expected_question: 'Nullable?',
-            assert_options: -> options do
-              expect(options).to eq([
-                'false',
-                'true',
-                'unspecified'
-              ])
-            end,
-            response: 'true'
-          },
-          {
-            expected_question: 'Add/rename/remove another?',
-            response: false
-          },
-        ]
-
-        wizard.collect_input(prompt: FakePrompt.new(@commands))
-        expect(wizard.filename).to eq('add_price_cents_to_menu_items')
-        expect(wizard.content).to eq("    change_table :menu_items do |t|\n      t.integer :price_cents, null: true\n    end")
-      end
-    end
-
-    context 'nullable unspecified' do
       it 'generates add_column code without null argument' do
         @commands += [
           {
             expected_question: 'Nullable?',
             assert_options: -> options do
               expect(options).to eq([
-                'false',
-                'true',
-                'unspecified'
+                'nullable',
+                'not nullable'
               ])
             end,
-            response: 'unspecified'
+            response: 'nullable'
           },
           {
             expected_question: 'Add/rename/remove another?',
