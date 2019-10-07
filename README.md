@@ -36,6 +36,7 @@ Migration Builder features currently include:
 - Adding columns on existing tables (including null constraints)
 - Removing columns from existing tables
 - Renaming existing tables
+- Adding unique indexes (including compound unique indexes)
 - Creating new tables
 - Dropping existing tables
 
