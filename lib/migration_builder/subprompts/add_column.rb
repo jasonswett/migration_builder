@@ -18,9 +18,7 @@ module MigrationBuilder
         selection = 'Add column'
 
         while add_another
-          @column_name = @prompt.ask('Column name:')
-
-          @operations << operation(@column_name, selection)
+          @operations << operation(selection)
           add_another = @prompt.yes?('Add another?')
         end
       end
@@ -36,22 +34,17 @@ module MigrationBuilder
 
       private
 
-      def operation(column_name, selection)
-        if selection == 'Add column'
-          @filename = "add_#{column_name}_to_#{@table_name}"
+      def operation(selection)
+        column_type = @prompt.default_select('Column type:', COLUMN_TYPES)
+        column_name = @prompt.ask('Column name:')
+        @filename = "add_#{column_name}_to_#{@table_name}"
 
-          column_type = @prompt.default_select(
-            "Type for column #{column_name}:",
-            COLUMN_TYPES
-          )
+        nullable = @prompt.default_select('Nullable?', ['nullable', 'not nullable'])
 
-          nullable = @prompt.default_select('Nullable?', ['nullable', 'not nullable'])
-
-          if nullable == 'nullable'
-            "t.#{column_type} :#{column_name}"
-          else
-            "t.#{column_type} :#{column_name}, null: false"
-          end
+        if nullable == 'nullable'
+          "t.#{column_type} :#{column_name}"
+        else
+          "t.#{column_type} :#{column_name}, null: false"
         end
       end
     end

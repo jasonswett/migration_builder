@@ -18,11 +18,7 @@ RSpec.describe MigrationBuilder::Wizard do
           response: 'menu_items'
         },
         {
-          expected_question: 'Column name:',
-          response: 'price_cents'
-        },
-        {
-          expected_question: 'Type for column price_cents:',
+          expected_question: 'Column type:',
           assert_options: -> options do
             expect(options).to eq(%w(
               string
@@ -41,6 +37,10 @@ RSpec.describe MigrationBuilder::Wizard do
             ))
           end,
           response: 'integer'
+        },
+        {
+          expected_question: 'Column name:',
+          response: 'price_cents'
         },
       ]
     end

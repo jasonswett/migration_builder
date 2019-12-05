@@ -18,13 +18,13 @@ RSpec.describe MigrationBuilder::Wizard do
           response: 'menu_items'
         },
         {
-          expected_question: 'Column name:',
-          response: 'name'
-        },
-        {
-          expected_question: 'Type for column name:',
+          expected_question: 'Column type:',
           assert_options: -> options { expect(options).to include('string') },
           response: 'string'
+        },
+        {
+          expected_question: 'Column name:',
+          response: 'name'
         },
         {
           expected_question: 'Nullable?',
@@ -35,13 +35,13 @@ RSpec.describe MigrationBuilder::Wizard do
           response: true
         },
         {
-          expected_question: 'Column name:',
-          response: 'price_cents'
-        },
-        {
-          expected_question: 'Type for column price_cents:',
+          expected_question: 'Column type:',
           assert_options: -> options { expect(options).to include('integer') },
           response: 'integer'
+        },
+        {
+          expected_question: 'Column name:',
+          response: 'price_cents'
         },
         {
           expected_question: 'Nullable?',
