@@ -59,7 +59,7 @@ RSpec.describe MigrationBuilder::Wizard do
             response: 'not nullable'
           },
           {
-            expected_question: 'Add/rename/remove another?',
+            expected_question: 'Add another?',
             response: false
           },
         ]
@@ -84,7 +84,7 @@ RSpec.describe MigrationBuilder::Wizard do
             response: 'nullable'
           },
           {
-            expected_question: 'Add/rename/remove another?',
+            expected_question: 'Add another?',
             response: false
           },
         ]

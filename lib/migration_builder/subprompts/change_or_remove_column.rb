@@ -5,7 +5,6 @@ module MigrationBuilder
 
       def initialize(change_or_create:, prompt:, table_name:, utility_class:)
         @change_or_create = change_or_create
-        @allow_remove     = change_or_create == 'change'
 
         @prompt        = prompt
         @table_name    = table_name
@@ -23,12 +22,10 @@ module MigrationBuilder
             @column_name = @prompt.default_select('Column to rename:', @utility_class.column_names(@table_name))
           elsif selection == 'Remove column'
             @column_name = @prompt.default_select('Column to remove:', @utility_class.column_names(@table_name))
-          else
-            @column_name = @prompt.ask('Column name:')
           end
 
           @operations << operation(@column_name, selection)
-          add_another = @prompt.yes?(add_another_question)
+          add_another = @prompt.yes?('Rename/remove another?')
         end
       end
 
@@ -44,37 +41,14 @@ module MigrationBuilder
       private
 
       def prompt_for_selection
-        if @allow_remove
-          @prompt.default_select(
-            'Rename or remove column?',
-            ['Rename column', 'Remove column']
-          )
-        else
-          'Add column'
-        end
-      end
-
-      def add_another_question
-        @allow_remove ? 'Add/rename/remove another?' : 'Add another?'
+        @prompt.default_select(
+          'Rename or remove column?',
+          ['Rename column', 'Remove column']
+        )
       end
 
       def operation(column_name, selection)
-        if selection == 'Add column'
-          @filename = "add_#{column_name}_to_#{@table_name}"
-
-          column_type = @prompt.default_select(
-            "Type for column #{column_name}:",
-            COLUMN_TYPES
-          )
-
-          nullable = @prompt.default_select('Nullable?', ['nullable', 'not nullable'])
-
-          if nullable == 'nullable'
-            "t.#{column_type} :#{column_name}"
-          else
-            "t.#{column_type} :#{column_name}, null: false"
-          end
-        elsif selection == 'Rename column'
+        if selection == 'Rename column'
           new_column_name = @prompt.ask('New column name:')
           @filename = "rename_#{@table_name}_#{column_name}_to_#{new_column_name}"
           "t.rename :#{column_name}, :#{new_column_name}"

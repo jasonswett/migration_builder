@@ -36,7 +36,7 @@ RSpec.describe MigrationBuilder::Wizard do
           response: 'price_cents'
         },
         {
-          expected_question: 'Add/rename/remove another?',
+          expected_question: 'Rename/remove another?',
           response: false
         },
       ])
