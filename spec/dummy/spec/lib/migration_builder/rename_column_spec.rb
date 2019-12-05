@@ -3,24 +3,24 @@ require 'rails_helper'
 RSpec.describe MigrationBuilder::Wizard do
   let(:wizard) { default_wizard }
 
-  describe 'remove column' do
+  describe 'rename column' do
     it 'generates remove_column code' do
       prompt = FakePrompt.new([
         {
           expected_question: 'What would you like to do?',
           assert_options: -> options do
-            expect(options).to include('Add column(s) to existing table')
+            expect(options).to include('Rename/remove column(s) on existing table')
           end,
-          response: 'Add column(s) to existing table'
+          response: 'Rename/remove column(s) on existing table'
         },
         {
           expected_question: 'Which table?',
           response: 'menu_items'
         },
         {
-          expected_question: 'Add, rename or remove column?',
+          expected_question: 'Rename or remove column?',
           assert_options: -> options do
-            expect(options).to eq(['Add column', 'Rename column', 'Remove column'])
+            expect(options).to eq(['Rename column', 'Remove column'])
           end,
           response: 'Rename column'
         },

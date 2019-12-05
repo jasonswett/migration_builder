@@ -46,8 +46,8 @@ module MigrationBuilder
       def prompt_for_selection
         if @allow_remove
           @prompt.default_select(
-            'Add, rename or remove column?',
-            ['Add column', 'Rename column', 'Remove column']
+            'Rename or remove column?',
+            ['Rename column', 'Remove column']
           )
         else
           'Add column'

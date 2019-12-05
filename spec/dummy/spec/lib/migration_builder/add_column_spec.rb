@@ -18,13 +18,6 @@ RSpec.describe MigrationBuilder::Wizard do
           response: 'menu_items'
         },
         {
-          expected_question: 'Add, rename or remove column?',
-          assert_options: -> options do
-            expect(options).to eq(['Add column', 'Rename column', 'Remove column'])
-          end,
-          response: 'Add column'
-        },
-        {
           expected_question: 'Column name:',
           response: 'price_cents'
         },

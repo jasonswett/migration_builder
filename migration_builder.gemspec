@@ -30,4 +30,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "sqlite3"
   spec.add_development_dependency "rspec-rails"
+  spec.add_development_dependency "pry"
 end
