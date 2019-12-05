@@ -1,4 +1,5 @@
-require_relative 'subprompts/column'
+require_relative 'subprompts/add_column'
+require_relative 'subprompts/change_or_remove_column'
 require_relative 'subprompts/index'
 require_relative 'prompt'
 require_relative 'utilities'
@@ -15,11 +16,28 @@ module MigrationBuilder
       @prompt = prompt
 
       commands = {
-        'Add/rename/remove column(s) on existing table' => {
+        'Add column(s) to existing table' => {
           callback: -> {
             @table_name = prompt_for_table_name
 
-            subprompt = Subprompts::Column.new(
+            subprompt = Subprompts::AddColumn.new(
+              change_or_create: 'change',
+              prompt: @prompt,
+              table_name: @table_name,
+              utility_class: @utility_class
+            )
+
+            subprompt.run
+
+            @content = subprompt.content
+            @filename = subprompt.filename
+          }
+        },
+        'Rename/remove column(s) on existing table' => {
+          callback: -> {
+            @table_name = prompt_for_table_name
+
+            subprompt = Subprompts::ChangeOrRemoveColumn.new(
               change_or_create: 'change',
               prompt: @prompt,
               table_name: @table_name,
@@ -61,7 +79,7 @@ module MigrationBuilder
           callback: -> {
             @table_name = @prompt.ask('Table name:')
 
-            subprompt = Subprompts::Column.new(
+            subprompt = Subprompts::AddColumn.new(
               change_or_create: 'create',
               prompt: @prompt,
               table_name: @table_name,

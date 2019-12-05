@@ -9,9 +9,9 @@ RSpec.describe MigrationBuilder::Wizard do
         {
           expected_question: 'What would you like to do?',
           assert_options: -> options do
-            expect(options).to include('Add/rename/remove column(s) on existing table')
+            expect(options).to include('Add column(s) to existing table')
           end,
-          response: 'Add/rename/remove column(s) on existing table'
+          response: 'Add column(s) to existing table'
         },
         {
           expected_question: 'Which table?',
