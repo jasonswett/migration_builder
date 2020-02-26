@@ -88,7 +88,7 @@ GEM
     minitest (5.11.3)
     necromancer (0.5.0)
     nio4r (2.4.0)
-    nokogiri (1.10.7)
+    nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     pastel (0.7.3)
       equatable (~> 0.6)
